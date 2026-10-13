@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>VolRail</title>
+  <meta name="description" content="Comparateur train, avion et train + avion assemblés.">
+  <meta name="theme-color" content="#6ab9f3" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1d33" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="VolRail">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="preload" href="fonts/Nunito-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/Fredoka-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Icônes au trait (1.6), utilisées via <svg class="i"><use href="#i-…"/></svg>. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-train" viewBox="0 0 24 24"><path d="M8 3.1V7a4 4 0 0 0 8 0V3.1"/><path d="m9 15-1-1"/><path d="m15 15 1-1"/><path d="M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5Z"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/></symbol>
+      <symbol id="i-plane" viewBox="0 0 24 24"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></symbol>
+      <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/><path d="M12 19h1.5a3.5 3.5 0 0 0 0-7h-3a3.5 3.5 0 0 1 0-7H12"/></symbol>
+      <symbol id="i-basket" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></symbol>
+      <symbol id="i-swap" viewBox="0 0 24 24"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+      <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+      <symbol id="i-ext" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.7 18.4-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-2.6"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+      <symbol id="i-chev-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+      <symbol id="i-chev-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+      <symbol id="i-chev-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+      <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></symbol>
+      <symbol id="i-share" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="m16 6-4-4-4 4"/><path d="M12 2v13"/></symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+      <symbol id="i-cal-plus" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M12 14v4"/><path d="M10 16h4"/></symbol>
+      <!-- Illustrations : avion de ligne (avec ses traînées) et train, réutilisés par <use>. -->
+      <linearGradient id="g-trail" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".55" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      <linearGradient id="g-fin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5ab4f0"/><stop offset="1" stop-color="#1d7ccb"/></linearGradient>
+      <linearGradient id="g-body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".7" stop-color="#f4f8fc"/><stop offset="1" stop-color="#d9e7f3"/></linearGradient>
+      <linearGradient id="g-train" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e3edf5"/></linearGradient>
+      <symbol id="ill-plane" viewBox="-240 0 364 48">
+        <path d="M44 31.2 L-238 34 L-238 34.6 L44 33.4 Z" fill="url(#g-trail)"/>
+        <path d="M50 25.6 L-200 27.2 L-200 27.6 L50 27 Z" fill="url(#g-trail)" opacity=".55"/>
+        <path d="M58 15 L46 4 L53 4 L70 14.5 Z" fill="#8ccbf5"/>
+        <path d="M12 15 L3 1.5 Q2.6 0.6 3.6 0.6 L13 0.6 Q14.6 0.6 15.6 1.8 L31 14 Z" fill="url(#g-fin)"/>
+        <path d="M9 21 C 9 16.5, 15 14, 24 14 L 98 14 C 107 14, 116 17.5, 119 21.5 C 116 25.5, 108 28, 98 28 L 24 28 C 15 28, 9 25.5, 9 21 Z" fill="url(#g-body)"/>
+        <path d="M24 23.2 H104 C 103 24.2, 101.5 24.8, 100 25 H24 Z" fill="#4caf50"/>
+        <path d="M24 22 H106" stroke="#2f97e4" stroke-width="1.2"/>
+        <path d="M108.5 17.2 C 111.5 17.6, 114.2 18.8, 116 20.4 L 109 20.4 Z" fill="#175f9c"/>
+        <g fill="#2f97e4"><rect x="32" y="17" width="2.6" height="3" rx="1.3"/><rect x="37" y="17" width="2.6" height="3" rx="1.3"/><rect x="42" y="17" width="2.6" height="3" rx="1.3"/><rect x="47" y="17" width="2.6" height="3" rx="1.3"/><rect x="52" y="17" width="2.6" height="3" rx="1.3"/><rect x="57" y="17" width="2.6" height="3" rx="1.3"/><rect x="62" y="17" width="2.6" height="3" rx="1.3"/><rect x="67" y="17" width="2.6" height="3" rx="1.3"/><rect x="72" y="17" width="2.6" height="3" rx="1.3"/><rect x="77" y="17" width="2.6" height="3" rx="1.3"/><rect x="82" y="17" width="2.6" height="3" rx="1.3"/><rect x="87" y="17" width="2.6" height="3" rx="1.3"/><rect x="92" y="17" width="2.6" height="3" rx="1.3"/></g>
+        <path d="M99.5 16.4 h3.4 v7 h-3.4 Z" fill="none" stroke="#bcd3e6" stroke-width=".8"/>
+        <path d="M6 22.5 L0.8 26.6 Q0.4 27.4 1.3 27.4 L9 27.4 L22 23.6 Z" fill="#1d7ccb"/>
+        <path d="M54 24.5 L37 43.4 Q36.6 44.2 37.6 44.2 L44 44.2 Q45.4 44.2 46.4 43.2 L72 25 Z" fill="#1d7ccb"/>
+        <rect x="47" y="29.5" width="16" height="6.4" rx="3.2" fill="#d6e6f3"/>
+        <rect x="60.6" y="29.5" width="2.4" height="6.4" rx="1.2" fill="#175f9c"/>
+      </symbol>
+      <symbol id="ill-train" viewBox="0 0 268 52">
+        <rect x="10" y="4" width="16" height="2.4" rx="1.2" fill="#93a7b8"/><path d="M14 4 L22 -2" stroke="#93a7b8" stroke-width="1.6"/>
+        <rect x="0" y="6" width="80" height="34" rx="9" fill="url(#g-train)"/>
+        <rect x="84" y="6" width="80" height="34" rx="9" fill="url(#g-train)"/>
+        <path d="M168 6 H214 C 236 6, 258 20, 266 33 C 267.5 36, 266 40, 262 40 H168 Z" fill="url(#g-train)"/>
+        <path d="M0 28 H80 M84 28 H164 M168 28 H262" stroke="#4caf50" stroke-width="4"/>
+        <path d="M0 32.5 H80 M84 32.5 H164 M168 32.5 H264" stroke="#2f97e4" stroke-width="1.6"/>
+        <g fill="#2f97e4"><rect x="8" y="12" width="13" height="9" rx="3"/><rect x="25" y="12" width="13" height="9" rx="3"/><rect x="42" y="12" width="13" height="9" rx="3"/><rect x="59" y="12" width="13" height="9" rx="3"/><rect x="92" y="12" width="13" height="9" rx="3"/><rect x="109" y="12" width="13" height="9" rx="3"/><rect x="126" y="12" width="13" height="9" rx="3"/><rect x="143" y="12" width="13" height="9" rx="3"/><rect x="176" y="12" width="13" height="9" rx="3"/><rect x="193" y="12" width="13" height="9" rx="3"/></g>
+        <path d="M222 11 C 236 12, 248 19, 254 26 H222 Z" fill="#175f9c"/>
+        <circle cx="258" cy="35" r="1.8" fill="#ffc94d"/>
+        <g fill="#12324a"><circle cx="14" cy="43" r="5"/><circle cx="66" cy="43" r="5"/><circle cx="98" cy="43" r="5"/><circle cx="150" cy="43" r="5"/><circle cx="182" cy="43" r="5"/><circle cx="240" cy="43" r="5"/></g>
+        <g fill="#93a7b8"><circle cx="14" cy="43" r="1.8"/><circle cx="66" cy="43" r="1.8"/><circle cx="98" cy="43" r="1.8"/><circle cx="150" cy="43" r="1.8"/><circle cx="182" cy="43" r="1.8"/><circle cx="240" cy="43" r="1.8"/></g>
+      </symbol>
+      <symbol id="ill-cloud" viewBox="0 0 120 50"><path d="M22 48 C 8 48, 2 40, 6 32 C 9 26, 16 24, 22 26 C 24 14, 36 6, 50 9 C 58 1, 76 0, 84 12 C 94 8, 108 14, 108 26 C 118 28, 120 40, 112 46 C 110 47.4, 107 48, 104 48 Z" style="fill:var(--ill-cloud)"/></symbol>
+    </defs>
+  </svg>
+
+
+  <!-- Le ciel et les champs : recherche posée sur le paysage -->
+  <header class="hero" id="hero">
+    <div class="hero-sky" aria-hidden="true">
+      <span class="sun"></span>
+      <svg class="cloud c1" viewBox="0 0 120 50"><use href="#ill-cloud"/></svg>
+      <svg class="cloud c2" viewBox="0 0 120 50"><use href="#ill-cloud"/></svg>
+      <svg class="cloud c3" viewBox="0 0 120 50"><use href="#ill-cloud"/></svg>
+      <svg class="cloud c4" viewBox="0 0 120 50"><use href="#ill-cloud"/></svg>
+      <div class="hero-plane" id="heroPlane"><svg viewBox="0 0 364 48"><use href="#ill-plane"/></svg></div>
+      <svg class="hills" viewBox="0 0 1440 150" preserveAspectRatio="none">
+        <path d="M0 70 C 180 30, 360 34, 560 64 S 940 96, 1140 56 S 1380 30, 1440 44 V150 H0Z" style="fill:var(--ill-hill-1)"/>
+        <path d="M0 100 C 240 70, 470 76, 700 96 S 1120 118, 1320 92 S 1420 84, 1440 88 V150 H0Z" style="fill:var(--ill-hill-2)"/>
+        <path d="M0 122 C 300 112, 700 112, 1000 120 S 1340 126, 1440 120 V150 H0Z" style="fill:var(--ill-hill-3)"/>
+        <path d="M0 150 V140 C 360 131, 1080 131, 1440 140 V150 Z" style="fill:var(--bg)"/>
+      </svg>
+      <div class="hero-trees"><i style="left:8%"></i><i style="left:14%" class="s"></i><i style="left:61%"></i><i style="left:86%" class="s"></i><i style="left:91%"></i></div>
+      <div class="hero-track"></div>
+      <div class="hero-train"><svg viewBox="0 0 268 52" overflow="visible"><use href="#ill-train"/></svg></div>
+    </div>
+
+    <div class="hero-bar">
+      <a class="brand" href="./" aria-label="VolRail, accueil">
+        <img src="icons/icon.svg" alt="" width="36" height="36">
+        <span>Vol<b>Rail</b></span>
+      </a>
+      <span class="status" id="status" role="status" title="État des sources">…</span>
+      <button type="button" class="basket-btn" id="basketFab" aria-label="Ouvrir le panier"><svg class="i"><use href="#i-basket"/></svg><span id="basketFabCount">0</span></button>
+    </div>
+
+    <section class="col-search" aria-label="Recherche">
+      <h1 class="hero-title">Le ciel ou les <span>champs</span> ?</h1>
+      <button type="button" class="search-summary" id="searchSummary" hidden aria-expanded="false" aria-controls="form">
+        <span class="ss-route" id="ssRoute"></span>
+        <span class="ss-meta" id="ssMeta"></span>
+        <span class="ss-edit">Modifier</span>
+      </button>
+
+      <form class="search" id="form" autocomplete="off" novalidate>
+        <div class="sb">
+          <div class="sb-places">
+            <div class="field place sb-cell">
+              <label for="from">Départ</label>
+              <input id="from" type="text" placeholder="D'où pars-tu ?" enterkeyhint="next" spellcheck="false" autocapitalize="words" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="fromSuggest">
+              <input type="hidden" id="fromId">
+              <ul class="suggest" id="fromSuggest" role="listbox" hidden></ul>
+            </div>
+            <button type="button" class="swap" id="swap" aria-label="Inverser départ et arrivée" title="Inverser"><svg class="i"><use href="#i-swap"/></svg></button>
+            <div class="field place sb-cell">
+              <label for="to">Arrivée</label>
+              <input id="to" type="text" placeholder="Où vas-tu ?" enterkeyhint="search" spellcheck="false" autocapitalize="words" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="toSuggest">
+              <input type="hidden" id="toId">
+              <ul class="suggest" id="toSuggest" role="listbox" hidden></ul>
+            </div>
+          </div>
+          <div class="sb-dates">
+            <div class="field sb-cell">
+              <label for="date">Aller</label>
+              <input id="date" type="date" required>
+            </div>
+            <div class="field sb-cell">
+              <label for="dateRet">Retour <button type="button" class="linkbtn" id="clearRet" hidden>effacer</button></label>
+              <input id="dateRet" type="date">
+            </div>
+          </div>
+          <details class="sb-cell sb-pop" id="paxPop">
+            <summary><span class="label">Voyageurs</span><span class="val" id="paxSummary">1 voyageur</span></summary>
+            <div class="pop">
+              <div class="pop-row">
+                <span class="label" id="paxLabel">Voyageurs</span>
+                <div class="stepper" role="group" aria-labelledby="paxLabel">
+                  <button type="button" id="paxMinus" aria-label="Un voyageur de moins"><svg class="i"><use href="#i-minus"/></svg></button>
+                  <output id="pax" aria-live="polite">1</output>
+                  <button type="button" id="paxPlus" aria-label="Un voyageur de plus"><svg class="i"><use href="#i-plus"/></svg></button>
+                </div>
+              </div>
+              <div class="field">
+                <label for="card">Carte de réduction SNCF</label>
+                <div class="select"><select id="card"><option value="">Aucune</option></select><svg class="i"><use href="#i-chev-down"/></svg></div>
+              </div>
+            </div>
+          </details>
+          <button type="submit" class="btn primary go" id="go">Comparer</button>
+        </div>
+
+        <div class="sb-under">
+          <div class="quick" id="quick" aria-label="Trajets récents"></div>
+          <details class="options" id="options">
+            <summary><svg class="i"><use href="#i-grid"/></svg>Filtres <span class="count" id="filterCount" hidden>0</span></summary>
+            <div class="pop options-body">
+              <div class="row2">
+                <div class="field"><label for="fDepAfter">Départ après</label><input type="time" id="fDepAfter"></div>
+                <div class="field"><label for="fArrBefore">Arrivée avant</label><input type="time" id="fArrBefore"></div>
+              </div>
+              <label class="check"><input type="checkbox" id="fDirect"><span>Direct uniquement</span></label>
+              <label class="check"><input type="checkbox" id="fNoLowcost"><span>Sans low-cost</span></label>
+              <hr>
+              <label class="check" title="Antibes, Cannes, Toulon, Marseille… Seulement si c'est moins cher."><input type="checkbox" id="nearby" checked><span>Chercher aussi depuis les villes voisines</span></label>
+              <label class="check" title="Ajoute l'accès gare / aéroport (tram, navette…) et le bagage cabine des low-cost."><input type="checkbox" id="d2d"><span>Prix porte à porte</span></label>
+              <button type="button" class="linkbtn" id="fReset" hidden>Effacer les filtres</button>
+            </div>
+          </details>
+        </div>
+        <p class="form-error" id="formError" role="alert" hidden></p>
+      </form>
+    </section>
+  </header>
+
+  <main id="main">
+    <!-- Aller / retour : pilote les résultats et le calendrier -->
+    <div class="legs" id="legSwitch" role="tablist" aria-label="Sens du trajet" hidden>
+      <button type="button" role="tab" data-leg="aller" aria-selected="true"></button>
+      <button type="button" role="tab" data-leg="retour" aria-selected="false"></button>
+    </div>
+
+    <!-- Résultats -->
+    <section class="col-results" aria-label="Résultats">
+      <div id="results" hidden>
+        <h1 class="route-title" id="routeTitle"></h1>
+        <div class="notices" id="notices"></div>
+
+        <div class="summary" id="best"></div>
+        <div class="roundtrip" id="roundTrip" hidden></div>
+        <div class="advice" id="advice" hidden></div>
+
+        <div class="actions-row">
+          <button type="button" class="btn" id="alertBtn"><svg class="i"><use href="#i-bell"/></svg>Alerte prix</button>
+          <button type="button" class="btn" id="matrixBtn" hidden><svg class="i"><use href="#i-grid"/></svg>± 3 jours</button>
+          <button type="button" class="btn" id="shareBtn"><svg class="i"><use href="#i-share"/></svg>Partager</button>
+        </div>
+
+        <section class="panel matrix" id="matrixCard" hidden aria-labelledby="matrixTitle">
+          <div class="panel-head"><h2 id="matrixTitle">Aller × retour à ± 3 jours</h2><span class="note" id="matrixNote"></span></div>
+          <div class="matrix-wrap" id="matrixWrap"></div>
+        </section>
+
+        <div class="toolbar">
+          <div class="tabs" id="tabs" role="tablist" aria-label="Mode">
+            <button type="button" role="tab" data-tab="all" aria-selected="true">Tout <span class="n"></span></button>
+            <button type="button" role="tab" data-tab="train" aria-selected="false"><svg class="i"><use href="#i-train"/></svg>Train <span class="n"></span></button>
+            <button type="button" role="tab" data-tab="flight" aria-selected="false"><svg class="i"><use href="#i-plane"/></svg>Avion <span class="n"></span></button>
+            <button type="button" role="tab" data-tab="combo" aria-selected="false"><svg class="i"><use href="#i-route"/></svg>Les deux <span class="n"></span></button>
+          </div>
+          <div class="airports" id="airportChips" role="group" aria-label="Aéroport" hidden></div>
+          <div class="select sort"><select id="sort" aria-label="Trier par">
+            <option value="price">Prix</option>
+            <option value="duration">Durée</option>
+            <option value="dep">Départ</option>
+            <option value="co2Kg">CO₂</option>
+          </select><svg class="i"><use href="#i-chev-down"/></svg></div>
+        </div>
+
+        <ol class="list" id="list"></ol>
+        <button type="button" class="btn more" id="moreBtn" hidden></button>
+        <p class="note center progress" id="combosState" hidden></p>
+
+        <section class="panel nearby" id="nearbyCard" hidden aria-labelledby="nearbyTitle">
+          <h2 id="nearbyTitle">Moins cher pas loin</h2>
+          <ul class="nearby-list" id="nearbyList"></ul>
+        </section>
+      </div>
+
+      <section class="empty" id="empty">
+        <h2>Tes trajets</h2>
+        <div class="recent-cards" id="recentCards"></div>
+        <div class="features">
+          <div class="feature train"><span class="f-ico"><svg class="i"><use href="#i-train"/></svg></span><b>Le train</b><span>Tous les prix SNCF Connect, cartes de réduction comprises.</span></div>
+          <div class="feature flight"><span class="f-ico"><svg class="i"><use href="#i-plane"/></svg></span><b>L'avion</b><span>Toutes les compagnies de Google Flights, low-cost incluses.</span></div>
+          <div class="feature combo"><span class="f-ico"><svg class="i"><use href="#i-route"/></svg></span><b>Les deux</b><span>Train puis avion (ou l'inverse) quand c'est moins cher.</span></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- Calendrier, panier, alertes -->
+    <aside class="col-side">
+      <section class="panel calendar" id="calendar" hidden aria-labelledby="calTitle">
+        <button type="button" class="panel-head cal-toggle" id="calToggle" aria-expanded="true">
+          <h2 id="calTitle"><svg class="i"><use href="#i-calendar"/></svg>Calendrier des prix</h2>
+          <span class="note" id="calSource"></span>
+          <svg class="i chev"><use href="#i-chev-down"/></svg>
+        </button>
+        <div class="cal-body">
+          <div class="cal-nav">
+            <button type="button" class="icon-btn" id="calPrev" aria-label="Mois précédent"><svg class="i"><use href="#i-chev-left"/></svg></button>
+            <div class="cal-month" id="calMonth" aria-live="polite"></div>
+            <button type="button" class="icon-btn" id="calNext" aria-label="Mois suivant"><svg class="i"><use href="#i-chev-right"/></svg></button>
+          </div>
+          <div class="cal-grid" id="calStrip"></div>
+          <p class="note cal-legend" id="calLegend"></p>
+        </div>
+      </section>
+
+      <section class="panel basket" id="basket" aria-labelledby="basketTitle">
+        <div class="panel-head">
+          <h2 id="basketTitle"><svg class="i"><use href="#i-basket"/></svg>Panier <span class="count" id="basketCount">0</span></h2>
+          <button type="button" class="icon-btn basket-close" id="basketClose" aria-label="Fermer le panier"><svg class="i"><use href="#i-x"/></svg></button>
+        </div>
+        <ul class="basket-list" id="basketList"></ul>
+        <p class="note" id="basketEmpty">Garde ici les trajets qui te plaisent : ils restent même après avoir fermé l'app.</p>
+        <div class="basket-foot" id="basketFoot" hidden>
+          <span>Total</span><b id="basketTotal">0 €</b>
+          <button type="button" class="linkbtn" id="basketClear">Vider</button>
+        </div>
+        <div class="basket-export" id="basketExport" hidden>
+          <button type="button" class="btn" id="icsBtn"><svg class="i"><use href="#i-download"/></svg>Fichier .ics</button>
+          <button type="button" class="btn" id="macCalBtn" hidden><svg class="i"><use href="#i-cal-plus"/></svg>Ajouter à <span id="macCalName">Ma Compta</span></button>
+        </div>
+      </section>
+
+      <section class="panel alerts" id="alertsCard" hidden aria-labelledby="alertsTitle">
+        <h2 id="alertsTitle"><svg class="i"><use href="#i-bell"/></svg>Alertes de prix <span class="count" id="alertsCount">0</span></h2>
+        <ul class="alerts-list" id="alertsList"></ul>
+        <p class="note" id="alertsNote"></p>
+      </section>
+    </aside>
+  </main>
+  <div class="scrim" id="scrim" hidden></div>
+
+  <dialog id="alertDialog" class="dialog" aria-labelledby="alertTitle">
+    <form method="dialog" id="alertForm">
+      <h2 id="alertTitle"><svg class="i"><use href="#i-bell"/></svg>Alerte de prix</h2>
+      <p id="alertRoute" class="note"></p>
+      <div class="field">
+        <label for="alertMax">Prévenir sous</label>
+        <div class="suffix"><input type="number" id="alertMax" min="1" step="1" inputmode="numeric" placeholder="à chaque baisse"><span>€</span></div>
+      </div>
+      <div class="field">
+        <label for="alertModes">Mode</label>
+        <div class="select"><select id="alertModes"><option value="all">Train ou avion</option><option value="train">Train seulement</option><option value="flight">Avion seulement</option></select><svg class="i"><use href="#i-chev-down"/></svg></div>
+      </div>
+      <p class="note" id="alertPushState"></p>
+      <div class="dialog-actions">
+        <button type="button" class="btn" id="alertCancel">Annuler</button>
+        <button type="submit" class="btn primary" id="alertSave">Créer l'alerte</button>
+      </div>
+    </form>
+  </dialog>
+
+  <footer class="foot note">Prix relevés au moment de la recherche. La réservation se fait chez l'opérateur.</footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

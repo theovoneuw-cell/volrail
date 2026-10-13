@@ -1,0 +1,16 @@
+{
+  "name": "VolRail — train, avion, combiné",
+  "short_name": "VolRail",
+  "description": "Comparateur train, avion et trajets assemblés train + avion.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5fafe",
+  "theme_color": "#bfe4fd",
+  "lang": "fr",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
