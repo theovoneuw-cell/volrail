@@ -943,3 +943,12 @@ button, summary, .chip, .tabs button, .legs button { -webkit-user-select: none; 
 }
 .toast { width: max-content; max-width: calc(100vw - 32px); text-align: center; }
 @media (max-width: 600px) { .hero .cloud.c2 { display: none; } }
+/* En-tête au téléphone : pas de logo + nom (l'icône est déjà sur l'écran d'accueil). Le panier seul
+   à droite ; l'état des sources n'apparaît que s'il y a un souci. */
+@media (max-width: 600px) {
+  .hero-bar { min-height: 38px; }
+  .hero-bar .brand { display: none; }
+  .hero-bar .status { margin-left: 0; margin-right: auto; }
+  .hero-bar .status:not(.warn):not(.err) { display: none; }
+  .hero-bar .basket-btn { margin-left: auto; }
+}
