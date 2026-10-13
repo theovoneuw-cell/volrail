@@ -1,6 +1,6 @@
 // Service worker : met en cache la coquille de l'application (l'API reste réseau)
 // et affiche les notifications d'alerte de prix envoyées par le serveur (Web Push).
-const CACHE = "volrail-20261013221613";
+const CACHE = "volrail-20261013221741";
 const SHELL = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest", "./icons/icon.svg", "./icons/icon-180.png", "./fonts/Nunito-Variable.woff2", "./fonts/Fredoka-Variable.woff2"];
 
 self.addEventListener("install", (e) => {

@@ -489,7 +489,7 @@
             <button type="button" class="btn notice-btn" id="unblockSncf">Débloquer</button></div>`;
         }
         if (touch()) {
-          return `<div class="notice warn">${svg("alert")}<div><b>SNCF Connect fait une pause.</b> Les prix des trains sont estimés. Ça repart tout seul dans quelques minutes, ou tout de suite avec « Débloquer » dans l'app VolRail du Mac.</div></div>`;
+          return `<div class="notice warn">${svg("alert")}<div><b>SNCF Connect bloque les recherches.</b> Les prix des trains sont estimés. Si ça dure, sur le Mac : app VolRail → « Débloquer », puis réponds au captcha.</div></div>`;
         }
         return `<div class="notice warn">${svg("alert")}<div><b>SNCF Connect refuse le serveur.</b> Les prix des trains sont estimés en attendant un cookie frais.
           <details><summary>Comment récupérer le cookie</summary><p>Dans Safari, ouvre sncf-connect.com et lance une recherche. Menu Développement → Afficher l'inspecteur web → Stockage → Cookies → www.sncf-connect.com : copie la valeur de « datadome ». Pas de menu Développement ? Safari → Réglages → Avancées → « Afficher les fonctionnalités pour les développeurs web ».</p></details></div>
@@ -1181,7 +1181,7 @@
     }
     if (!el.status.classList.contains("warn")) return;
     if (macBridge) unblockSncf();
-    else if (touch()) toast("SNCF repart tout seul, ou via « Débloquer » sur le Mac");
+    else if (touch()) toast("Sur le Mac : app VolRail → « Débloquer »");
     else pasteCookie();
   });
   el.legSwitch.addEventListener("click", (e) => {
