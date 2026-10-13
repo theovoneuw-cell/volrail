@@ -1,6 +1,6 @@
 // Service worker : met en cache la coquille de l'application (l'API reste réseau)
 // et affiche les notifications d'alerte de prix envoyées par le serveur (Web Push).
-const CACHE = "volrail-20261013221439";
+const CACHE = "volrail-20261013221613";
 const SHELL = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest", "./icons/icon.svg", "./icons/icon-180.png", "./fonts/Nunito-Variable.woff2", "./fonts/Fredoka-Variable.woff2"];
 
 self.addEventListener("install", (e) => {
@@ -14,7 +14,9 @@ self.addEventListener("fetch", (e) => {
   // L'API et les autres sites (liens de réservation) restent hors du cache.
   if (url.origin !== self.location.origin || url.pathname.includes("/api/") || e.request.method !== "GET") return;
   e.respondWith(
-    fetch(e.request)
+    // no-cache : on revalide auprès du serveur (GitHub Pages fait garder chaque fichier 10 min),
+    // sinon une nouvelle version n'arrive qu'après ce délai.
+    fetch(e.request, { cache: "no-cache" })
       .then((res) => {
         if (res.ok) {
           const copy = res.clone();
