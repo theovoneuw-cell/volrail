@@ -761,7 +761,7 @@
         return r;
       } catch (e) {
         if (!alive() || e.name === "AbortError") return null;
-        leg.notices.push(["warn", `${label} : ${e.message}`]);
+        if (!state.needKey) leg.notices.push(["warn", `${label} : ${e.message}`]);
         renderIf(legName);
         return null;
       }
@@ -770,7 +770,7 @@
     if (!alive()) return;
     if (legName === "aller") searchDone(run);
     if (!tr && !fl) {
-      leg.notices.push(["err", "Recherche impossible : le serveur ne répond pas."]);
+      leg.notices.push(["err", state.needKey ? "Cette app n'a pas encore la clé d'accès du Mac : touche « Clé d'accès » en haut pour la saisir." : "Recherche impossible : le serveur ne répond pas."]);
       leg.combosText = "";
       leg.loading = false;
       renderIf(legName);
