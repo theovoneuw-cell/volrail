@@ -184,10 +184,11 @@
       input.setAttribute("aria-expanded", String(v));
       if (!v) { active = -1; input.removeAttribute("aria-activedescendant"); }
     };
-    // Une ligne par ville, puis une par aéroport quand la ville en a plusieurs (Paris : CDG, Orly, Beauvais).
+    // Une ligne par ville, puis une par aéroport quand la ville en a plusieurs à elle (Paris : CDG, Orly, Beauvais).
+    const own = (c) => c.ownAirports || c.airports;
     const rowsOf = (cities) => cities.flatMap((c) => [
       { c, ap: "", label: c.name },
-      ...(c.airports.length > 1 ? c.airports.map((a) => ({ c, ap: a, label: `${c.name} ${c.airportNames?.[a] || a}` })) : []),
+      ...(own(c).length > 1 ? own(c).map((a) => ({ c, ap: a, label: `${c.name} ${c.airportNames?.[a] || a}` })) : []),
     ]);
     const pick = (row) => { input.value = row.label; hidden.value = row.c.id; hidden.dataset.ap = row.ap; open(false); };
     const bestRow = (rows) => rows.find((r) => r.c.airport && r.ap === r.c.airport && r.c === rows[0].c) || rows[0];
@@ -214,7 +215,7 @@
         if (!items.length || document.activeElement !== input) return open(false);
         list.innerHTML = items.map((row, i) => row.ap
           ? `<li role="option" class="ap" id="${list.id}-${i}" data-i="${i}">${svg("plane")}${esc(row.c.airportNames?.[row.ap] || row.ap)}<small>${esc(row.ap)}</small></li>`
-          : `<li role="option" id="${list.id}-${i}" data-i="${i}">${esc(row.c.name)}<small>${row.c.airports.length > 1 ? "tous les aéroports" : `${row.c.country !== "FR" ? esc(row.c.country) + " · " : ""}${row.c.hasRail ? svg("train") : ""}${row.c.airports.length ? svg("plane") + esc(row.c.airports[0]) : ""}`}</small></li>`).join("");
+          : `<li role="option" id="${list.id}-${i}" data-i="${i}">${esc(row.c.name)}<small>${own(row.c).length > 1 ? "tous les aéroports" : `${row.c.country !== "FR" ? esc(row.c.country) + " · " : ""}${row.c.area ? esc(row.c.area) + " · " : ""}${row.c.hasRail ? svg("train") : ""}${own(row.c).length ? svg("plane") + esc(own(row.c)[0]) : ""}`}</small></li>`).join("");
         active = items.indexOf(bestRow(items));
         highlight();
         open(true);
